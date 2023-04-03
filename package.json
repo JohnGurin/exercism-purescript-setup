@@ -1,0 +1,22 @@
+{
+  "name": "exercism-purescript-setup",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "purescript": "^0.14.9",
+    "spago": "^0.20.9"
+  },
+  "devDependencies": {
+    "fs-extra": "^11.1.1",
+    "json5": "^2.2.3",
+    "lnk": "^1.1.0"
+  },
+  "scripts": {
+    "postinstall": "mkdir .spago output || echo off",
+    "vscode-workspace": "node lib.cjs vscode-workspace",
+    "ex-download": "exercism download --track purescript --exercise",
+    "ex-move": "node lib.cjs exercise-move",
+    "ex-link": "node lib.cjs exercise-link",
+    "addex": "node lib.cjs addex",
+    "test": "node lib.cjs -- spago test -q"
+  }
+}
