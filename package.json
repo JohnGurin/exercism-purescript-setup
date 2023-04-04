@@ -11,10 +11,11 @@
     "lnk": "^1.1.0"
   },
   "scripts": {
-    "postinstall": "mkdir .spago output || echo off",
+    "setup-dirs": "mkdir .spago output | cd",
+    "setup-link": "node lib.cjs setup-link",
+    "postinstall": "npm run setup-dirs && npm run setup-link",
     "vscode-workspace": "node lib.cjs vscode-workspace",
     "ex-download": "exercism download --track purescript --exercise",
-    "ex-move": "node lib.cjs exercise-move",
     "ex-link": "node lib.cjs exercise-link",
     "addex": "node lib.cjs addex",
     "test": "node lib.cjs -- spago test -q"

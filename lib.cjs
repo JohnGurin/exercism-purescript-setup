@@ -6,16 +6,20 @@ const fse = require( 'fs-extra' );
 const lnk = require( 'lnk' );
 const JSON5 = require( 'json5' );
 
+const DS = path.sep
 const CMD = {
     VSCODE_WORKSPACE: 'vscode-workspace',
-    EXERCISE_MOVE: 'exercise-move',
+    SETUP_LINK: 'setup-link',
     EXERCISE_LINK: 'exercise-link',
     ADD_EXERCISE: 'addex',
     DOUBLE_DASH: '--',
 }
 
+const TRACK = 'purescript'
 const EXERCISES_DIR = 'exercises'
-const VSCODE_WORKSPACE_DEFAULT_FILE = '.vscode/exercism-purescript.code-workspace'
+const AUX_DIRS = ['.spago', 'output']
+const VSCODE_WORKSPACE_DEFAULT_FILE =
+    '.vscode/exercism-purescript.code-workspace'
 
 const cmd = process.argv[2]
 const arg1 = process.argv[3]
@@ -36,26 +40,37 @@ if ( cmd === CMD.VSCODE_WORKSPACE )
     fse.outputFileSync( workspacePath, JSON.stringify( workspace, null, 2 ) )
 }
 
-else if ( cmd === CMD.EXERCISE_MOVE )
+else if ( cmd === CMD.SETUP_LINK )
 {
-    const exercise = arg1
-    const target = path.resolve( EXERCISES_DIR, exercise )
-    const source = path.resolve(
-        execSync( 'exercism workspace' ).toString().trim(),
-        'purescript',
-        exercise
-    )
-    fse.move( source, target )
-        .then( () => console.log( `Moved to ${target}` ) )
+    const workspaceDir = ( function ()
+    {
+        let wsDir
+        try { wsDir = execSync( 'exercism workspace' ).toString().trim() }
+        catch { process.exit( 1 ) }
+        return wsDir
+    }() )
+    const target = path.resolve( '.' )
+    const source = path.resolve( workspaceDir, TRACK )
+
+    fse.existsSync( source ) || fse.mkdirSync( source )
+
+    console.log( `Linking exercism ${TRACK} track folder` )
+    lnk( [source], target, { force: true, rename: EXERCISES_DIR } )
+        .then( () => console.log(
+            `.${DS}${EXERCISES_DIR} -> ${source} `
+        ) )
         .catch( e => console.error( e.message ) )
 }
 
 else if ( cmd === CMD.EXERCISE_LINK )
 {
     const exercise = path.join( EXERCISES_DIR, arg1 )
+    console.log( `Linking ${AUX_DIRS}` )
     if ( fs.existsSync( exercise ) )
-        lnk( ['.spago', 'output'], exercise, { force: true } )
-            .then( () => console.log( 'Links added' ) )
+        lnk( AUX_DIRS, exercise, { force: true } )
+            .then( () => console.log(
+                `.${DS}${exercise}${DS}{${AUX_DIRS}} -> .${DS}{${AUX_DIRS}}`
+            ) )
             .catch( e => console.error( e.message ) )
     else
         console.error( `${exercise} not found` )
@@ -71,7 +86,6 @@ else if ( cmd === CMD.ADD_EXERCISE )
             `npm run ex-download ${exercise}${force}`,
             { stdio: 'inherit' }
         )
-        execSync( `npm run ex-move ${exercise}`, { stdio: 'inherit' } )
         execSync( `npm run ex-link ${exercise}`, { stdio: 'inherit' } )
     }
     catch ( e )

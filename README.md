@@ -13,15 +13,14 @@ https://exercism.org/tracks/purescript
 * Run test `npm test`
 
 ### Npm scripts
+#### setup
+* `setup-dirs` - creates `./.spago` and `./output` folders
+* `setup-link` - links `<exercism-workspace>/purescript` to `./exercises`
 #### exercise
-* `npm addex <exercise>` consists of other three `npm` scripts:
-* `npm ex-download <exercise>` - downloads the exercise into `exericsm workspace` folder 
-(in this case, `<exercism-workspace>/purescript/<exercise>`)
-* `npm ex-move <exercise>` - moves the exercise folder to `./exercises/<exercise>`
-* `npm ex-link <exercise>` - adds `./exercises/<exercise>/{.spago,output}` links 
-to `./.spago` and `./output` folders.
+* `addex <exercise>` consists of other two `npm` scripts:
+* `ex-download <exercise>` - downloads the exercise into `exericsm workspace` folder (in this case, `<exercism-workspace>/purescript/<exercise>`)
+* `ex-link <exercise>` - links `./exercises/<exercise>/{.spago,output}` to `./.spago` and `./output` folders.
 #### vscode
-* `npm run vscode-workspace` creates (if not exists) vscode workspace file in `./.vscode/`
-with `./exercises/*` sub-folders, updates `settings.purescript.pursExe` to `./node_modules/.bin/purs`. 
+* `vscode-workspace` creates (if not exists) vscode workspace file in `./.vscode/` with `./exercises/*` sub-folders, updates `settings.purescript.pursExe` to `./node_modules/.bin/purs`.
 #### idea
 * open the `.` folder
