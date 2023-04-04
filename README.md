@@ -24,3 +24,25 @@ https://exercism.org/tracks/purescript
 * `vscode-workspace` creates (if not exists) vscode workspace file in `./.vscode/` with `./exercises/*` sub-folders, updates `settings.purescript.pursExe` to `./node_modules/.bin/purs`.
 #### idea
 * open the `.` folder
+
+<details>
+  <summary>Typical folders structure</summary>
+
+```
+.
+├── exercism-workspace
+│   └── purescript (1)
+|       └── pangram
+└── exercism-purescript-setup
+    ├── .spago (2)
+    ├── output (3)
+    ├── node_modules
+    └── exercises (-> 1)
+        └── pangram
+            ├── .exercism
+            ├── .spago (-> 2)
+            ├── output (-> 3)
+            ├── src
+            └── test
+```
+</details>
